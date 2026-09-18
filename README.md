@@ -2,7 +2,7 @@
 
 # 🎯 ZeroMQ Pub-Sub Studio
 
-### A modern JavaFX workspace for exploring real-time Publish–Subscribe messaging with ZeroMQ
+### A modern JavaFX desktop application for exploring real-time Publish–Subscribe messaging with ZeroMQ
 
 <br>
 
@@ -27,22 +27,20 @@
 
 ---
 
-## ⚡ What is ZeroMQ Pub-Sub Studio?
+## ⚡ Overview
 
-**ZeroMQ Pub-Sub Studio** is a JavaFX desktop application that demonstrates the **Publisher–Subscriber messaging pattern** using ZeroMQ.
+**ZeroMQ Pub-Sub Studio** is a modern JavaFX desktop application built to demonstrate the **Publish–Subscribe (PUB/SUB) messaging pattern** using **ZeroMQ**.
 
-Instead of treating distributed messaging as an abstract concept, the application provides an interactive environment where you can:
+The application provides an interactive environment for publishing and receiving topic-based messages in real time while visualizing important distributed-system concepts through a modern desktop interface.
 
-* Publish topic-based messages
-* Subscribe to multiple topics
-* Observe messages arriving in real time
-* Experiment with priorities
-* Monitor message statistics
-* Search communication activity
-* Export message logs
-* Explore how topic filtering works
+It is designed for:
 
-The project is designed to make **distributed communication visible and interactive**.
+* Learning distributed messaging
+* Understanding PUB/SUB communication
+* Exploring topic-based subscriptions
+* Demonstrating asynchronous communication
+* Teaching distributed computing concepts
+* Experimenting with real-time notification systems
 
 > Built as part of **COMP438 — Distributed Computing**
 
@@ -50,35 +48,35 @@ The project is designed to make **distributed communication visible and interact
 
 # 🧠 Core Concept
 
-The application demonstrates the classic ZeroMQ PUB/SUB flow:
+The application demonstrates the classic ZeroMQ **Publisher–Subscriber** communication model.
 
 ```text
-                 ┌──────────────────┐
-                 │    Publisher     │
-                 │                  │
-                 │  COURSE          │
-                 │  EXAM            │
-                 │  EVENT           │
-                 │  NEWS            │
-                 └────────┬─────────┘
-                          │
-                          │ ZeroMQ
-                          │ PUB
-                          ▼
-                 ┌──────────────────┐
-                 │   Message Bus    │
-                 └────────┬─────────┘
-                          │
-              ┌───────────┼───────────┐
-              │           │           │
-              ▼           ▼           ▼
-        ┌──────────┐ ┌──────────┐ ┌──────────┐
-        │Subscriber│ │Subscriber│ │Subscriber│
-        │  COURSE  │ │   NEWS   │ │EXAM/EVENT│
-        └──────────┘ └──────────┘ └──────────┘
+                    ┌──────────────────┐
+                    │    PUBLISHER     │
+                    │                  │
+                    │  COURSE          │
+                    │  EXAM            │
+                    │  EVENT           │
+                    │  NEWS            │
+                    └────────┬─────────┘
+                             │
+                             │ ZeroMQ PUB
+                             ▼
+                    ┌──────────────────┐
+                    │   ZeroMQ Layer  │
+                    │   Topic Routing  │
+                    └────────┬─────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+        ┌───────────┐  ┌───────────┐  ┌───────────┐
+        │SUBSCRIBER │  │SUBSCRIBER │  │SUBSCRIBER │
+        │  COURSE   │  │   NEWS    │  │ EXAM/EVENT│
+        └───────────┘  └───────────┘  └───────────┘
 ```
 
-Subscribers receive only the topics they are interested in.
+Each subscriber can subscribe to one or more topics and receives messages matching its active subscriptions.
 
 ---
 
@@ -101,61 +99,68 @@ Subscribers receive only the topics they are interested in.
 
 ## 📥 Subscriber
 
-| Capability             | Description                           |
-| ---------------------- | ------------------------------------- |
-| 🎯 Multi-subscription  | Subscribe to several topics           |
-| ❌ Quick unsubscribe    | Remove active subscriptions instantly |
-| 🔔 Sound notifications | Optional notification sound           |
-| 🎨 Topic highlighting  | Visually distinguish message topics   |
-| 📊 Live statistics     | Track received messages               |
-| 📋 Clipboard support   | Copy received messages                |
-| ⤓ Inbox export         | Save received messages                |
-| ⏱️ Timestamp control   | Toggle message timestamps             |
+| Capability             | Description                                 |
+| ---------------------- | ------------------------------------------- |
+| 🎯 Multi-subscription  | Subscribe to multiple topics simultaneously |
+| ❌ Quick unsubscribe    | Remove active subscriptions instantly       |
+| 🔔 Sound notifications | Optional notification sound                 |
+| 🎨 Topic highlighting  | Visually distinguish different topics       |
+| 📊 Live statistics     | Track received messages                     |
+| 📋 Clipboard support   | Copy received messages                      |
+| ⤓ Inbox export         | Save received messages                      |
+| ⏱️ Timestamp control   | Toggle message timestamps                   |
 
 ---
 
 # 🎨 Interface
 
-The application uses a dark **Aurora-inspired interface** focused on:
+ZeroMQ Pub-Sub Studio uses a modern **Aurora-inspired dark interface** designed around clarity and real-time interaction.
 
-* Clear information hierarchy
-* Topic-based color coding
-* Modern cards and controls
-* Smooth interaction feedback
-* Real-time status indicators
-* Compact messaging workflows
-* Responsive JavaFX layouts
+### UI principles
 
-The goal is to make distributed messaging feel like an actual developer tool rather than a traditional classroom demo.
+* 🌑 Dark developer-oriented visual language
+* 💜 Color-coded topics
+* 🎛️ Modern controls and status indicators
+* ✨ Smooth interaction feedback
+* 📊 Real-time statistics
+* 🔎 Searchable activity
+* 📐 Responsive JavaFX layouts
+* ⚡ Fast and lightweight desktop experience
+
+The interface is designed to feel like a practical developer tool rather than a traditional classroom demonstration.
 
 ---
 
 # 🏗️ Architecture
 
-The application follows a simple distributed messaging architecture:
+The application combines JavaFX for the presentation layer with ZeroMQ for distributed messaging.
 
 ```text
-┌─────────────────────┐
-│     JavaFX UI       │
-├─────────────────────┤
-│ Publisher │Subscriber│
-└──────┬────────┬─────┘
-       │        │
-       ▼        ▼
-   ┌───────┐  ┌───────┐
-   │  PUB  │  │  SUB  │
-   │Socket │  │Socket │
-   └───┬───┘  └───┬───┘
-       │          │
-       └────┬─────┘
-            ▼
-      ┌───────────┐
-      │  ZeroMQ   │
-      │ Messaging │
-      └───────────┘
+┌─────────────────────────────────────────┐
+│               JavaFX UI                 │
+│                                         │
+│    ┌─────────────┐   ┌─────────────┐    │
+│    │  Publisher  │   │  Subscriber │    │
+│    └──────┬──────┘   └──────┬──────┘    │
+└───────────┼──────────────────┼──────────┘
+            │                  │
+            ▼                  ▼
+       ┌─────────┐        ┌─────────┐
+       │   PUB   │        │   SUB   │
+       │ Socket  │        │ Socket  │
+       └────┬────┘        └────┬────┘
+            │                  │
+            └────────┬─────────┘
+                     ▼
+              ┌──────────────┐
+              │    ZeroMQ    │
+              │ Messaging    │
+              └──────────────┘
 ```
 
-### Message Flow
+---
+
+# 🔄 Message Flow
 
 ```text
 Create Message
@@ -167,10 +172,13 @@ Select Topic
 Set Priority
       │
       ▼
-Serialize Payload
+Build Message Payload
       │
       ▼
 ZeroMQ Publisher
+      │
+      ▼
+PUB/SUB Transport
       │
       ▼
 Topic Filtering
@@ -179,82 +187,111 @@ Topic Filtering
 Matching Subscribers
       │
       ▼
-JavaFX Inbox
+JavaFX Subscriber UI
 ```
 
 ---
 
 # 🧩 Technology Stack
 
-| Technology     | Purpose               |
-| -------------- | --------------------- |
-| **Java 17+**   | Application runtime   |
-| **JavaFX 21**  | Desktop UI            |
-| **ZeroMQ 4.x** | Distributed messaging |
-| **PUB/SUB**    | Messaging pattern     |
-| **TCP**        | Transport layer       |
-| **Git**        | Version control       |
+| Technology     | Purpose                         |
+| -------------- | ------------------------------- |
+| **Java 17+**   | Application runtime             |
+| **JavaFX 21**  | Desktop graphical interface     |
+| **ZeroMQ 4.x** | Distributed messaging           |
+| **PUB/SUB**    | Messaging communication pattern |
+| **TCP**        | Network transport               |
+| **Git**        | Version control                 |
 
 ---
 
 # 🚀 Quick Start
 
-## 1. Clone
+## Prerequisites
+
+Before running the project, make sure you have:
+
+* Java 17 or newer
+* JavaFX 21
+* ZeroMQ 4.x
+* A compatible Java IDE
+
+Recommended IDEs:
+
+* IntelliJ IDEA
+* Eclipse
+* Visual Studio Code with Java extensions
+
+---
+
+## Clone the Repository
 
 ```bash
 git clone https://github.com/qusayjber/ZeroMQ.git
 cd ZeroMQ
 ```
 
-## 2. Open the project
+---
 
-Open the project using your preferred Java IDE.
+## Configure Dependencies
 
-Recommended:
+Configure the project with:
 
-* IntelliJ IDEA
-* Eclipse
-* VS Code with Java extensions
+```text
+Java 17+
+JavaFX 21
+ZeroMQ 4.x
+```
 
-## 3. Configure dependencies
+If the project uses local libraries, make sure the required ZeroMQ Java dependencies are available in the project's configured library path.
 
-Make sure the project has access to:
+---
 
-* Java 17+
-* JavaFX 21
-* ZeroMQ / compatible Java binding
+## Run the Application
 
-## 4. Run
+Open the project in your Java IDE and run the main JavaFX application class.
 
-Start the application from the main JavaFX application class.
+Once started, launch the Publisher and Subscriber workflow to begin exchanging messages.
 
 ---
 
 # 🎮 Usage
 
-### Publisher
+## Publisher
 
-1. Launch the Publisher interface.
-2. Select or create a topic.
-3. Enter a message.
-4. Select a priority.
+1. Open the Publisher interface.
+2. Select a topic.
+3. Enter the message content.
+4. Choose the message priority.
 5. Publish the message.
-6. Observe the activity statistics and log.
+6. Monitor the activity log and statistics.
 
-### Subscriber
+### Supported Topics
 
-1. Launch the Subscriber interface.
-2. Select one or more topics.
-3. Activate the subscriptions.
-4. Wait for matching messages.
-5. Inspect incoming notifications.
+```text
+COURSE
+EXAM
+EVENT
+NEWS
+CUSTOM
+```
+
+---
+
+## Subscriber
+
+1. Open the Subscriber interface.
+2. Select the topics you want to receive.
+3. Activate your subscriptions.
+4. Wait for incoming messages.
+5. Inspect received notifications.
 6. Copy or export the inbox when needed.
 
 ---
 
 # 🧪 Example Message
 
-A conceptual message can be represented as:
+A message can conceptually contain information such as:
 
 ```text
 TOPIC: EXAM
@@ -263,24 +300,24 @@ MESSAGE: Distributed Systems examination starts at 10:00
 TIMESTAMP: 2026-09-18 10:00:00
 ```
 
-The subscriber uses the topic information to determine whether the message belongs to its active subscriptions.
+The subscriber uses the topic information to determine whether the message matches an active subscription.
 
 ---
 
 # 🔬 What This Project Demonstrates
 
-This project provides a practical environment for understanding:
+ZeroMQ Pub-Sub Studio provides a practical demonstration of:
 
 * Publish–Subscribe architecture
-* Topic-based filtering
-* Distributed messaging
-* Asynchronous communication
-* Message producers and consumers
+* Topic-based message filtering
+* Distributed communication
+* Asynchronous messaging
+* Publisher and subscriber roles
 * Socket-based communication
 * Real-time event propagation
+* Network messaging
 * Desktop visualization of distributed systems
-
-It can also serve as a foundation for experimenting with larger messaging architectures.
+* Message monitoring and statistics
 
 ---
 
@@ -301,27 +338,7 @@ ZeroMQ/
 └── ...
 ```
 
-> The exact source structure may vary depending on the IDE configuration and project organization.
-
----
-
-# 📸 Screenshots
-
-Add screenshots here when publishing the project:
-
-```text
-docs/
-├── publisher.png
-├── subscriber.png
-├── messaging.png
-└── statistics.png
-```
-
-Example:
-
-![Publisher](docs/publisher.png)
-
-![Subscriber](docs/subscriber.png)
+The exact source structure depends on the project's Java IDE and dependency configuration.
 
 ---
 
@@ -329,13 +346,16 @@ Example:
 
 * [x] Publisher interface
 * [x] Subscriber interface
-* [x] Topic subscriptions
+* [x] Multi-topic subscriptions
+* [x] Custom topics
 * [x] Message priorities
 * [x] Activity logging
 * [x] Message statistics
-* [x] Export functionality
+* [x] Search functionality
+* [x] Message export
+* [x] Inbox export
 * [x] Notification feedback
-* [ ] Additional messaging patterns
+* [ ] Additional ZeroMQ messaging patterns
 * [ ] Advanced message inspection
 * [ ] Configurable broker settings
 * [ ] Extended distributed-system experiments
@@ -346,7 +366,23 @@ Example:
 
 **Course:** COMP438 — Distributed Computing
 
-The project was developed to provide a practical visualization of the **Publish–Subscribe communication model** and demonstrate how distributed components can exchange topic-oriented messages through ZeroMQ.
+The project demonstrates the **Publish–Subscribe communication model** and provides a visual environment for understanding how distributed components communicate through topic-based messaging.
+
+It connects theoretical distributed-computing concepts with a practical desktop implementation using JavaFX and ZeroMQ.
+
+---
+
+# 🤝 Contributing
+
+Contributions, improvements, bug reports, and ideas are welcome.
+
+If you would like to contribute:
+
+```bash
+git clone https://github.com/qusayjber/ZeroMQ.git
+```
+
+Create a feature branch, make your changes, and open a pull request.
 
 ---
 
@@ -354,13 +390,13 @@ The project was developed to provide a practical visualization of the **Publish�
 
 This project is licensed under the **MIT License**.
 
-See [`LICENSE`](LICENSE) for details.
+See [`LICENSE`](LICENSE) for the complete license text.
 
 ---
 
 <div align="center">
 
-### Built with Java • JavaFX • ZeroMQ
+### Built with ☕ Java · JavaFX · ZeroMQ
 
 **Explore distributed systems. Visualize communication. Build better systems.**
 
